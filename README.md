@@ -1,3 +1,3 @@
 # SonicScape
 
-# Music Visualizer Web Application
+### Music Visualizer Web Application
