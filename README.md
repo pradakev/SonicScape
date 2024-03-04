@@ -1,1 +1,3 @@
-# TuneStreaming
+# SonicScape
+
+### Music Visualizer Web Application
