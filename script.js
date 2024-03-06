@@ -48,7 +48,7 @@
     return new Square(x, y, 100, 100, color, opacity)
   }
 
-  const FPS = 60
+  const FPS = 30
 
   const numSquares = 500
   const squares = []
