@@ -5,6 +5,11 @@
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
 
+  addEventListener("resize", () => {
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+  })
+
   class Square {
     constructor(x, y, width, height, color) {
       this.x = x
