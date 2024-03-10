@@ -21,8 +21,69 @@
 <body>
   <canvas id="canvas"></canvas>
   <script src="twoScript.js"></script>
-  <script>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js'
+    import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+    
+   
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
 
+    window.addEventListener("click", () => {
+      const audioName = localStorage.getItem('audioName');
+    if (audioName != null) {
+      const audioRef = ref(storage, audioName);
+      getDownloadURL(audioRef)
+      .then((url) => {
+
+        fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+      const audio = document.createElement('audio');
+      audio.src = URL.createObjectURL(blob);
+      audio.play();
+      // const body = document.querySelector('body');
+      // body.appendChild(audio);
+      // audio.play();
+            
+                
+          const FREQUENCY_BIN_COUNT = 256;
+          let analyser;
+          const dataArray = new Uint8Array(FREQUENCY_BIN_COUNT);
+
+          // Create audio context
+          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          // Initialize analyser
+          analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 2 * FREQUENCY_BIN_COUNT;
+
+
+          // Analyser's frequencyBinCount is always half of the fftSize (https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/frequencyBinCount)
+          const source = audioCtx.createMediaElementSource(audio);
+          // Connect source -> analyser -> destination
+          source.connect(analyser);
+          analyser.connect(audioCtx.destination);
+
+        
+
+          setInterval(() => {
+            analyser.getByteFrequencyData(dataArray);
+            console.log(dataArray);
+          }, 50);
+ 
+
+        })
+          
+            
+      
+      
+
+          
+      })
+    }
+    })
+    
+   
   </script>
 </body>
 </html>
