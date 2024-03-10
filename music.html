@@ -25,23 +25,36 @@
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js'
     import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
     
-   
+    const firebaseConfig = {
+      apiKey: "AIzaSyA91M6bD68h_Bwt8-mD977tvU6uX14AwzI",
+    authDomain: "audio-project-b4ee4.firebaseapp.com",
+    projectId: "audio-project-b4ee4",
+    storageBucket: "audio-project-b4ee4.appspot.com",
+    messagingSenderId: "579109394249",
+    appId: "1:579109394249:web:8bbc429d5bc1c46b066c98"
+    };
     const app = initializeApp(firebaseConfig);
     const storage = getStorage(app);
 
     window.addEventListener("click", () => {
+      // Getting filename from originally uploaded mp3
       const audioName = localStorage.getItem('audioName');
     if (audioName != null) {
-      const audioRef = ref(storage, audioName);
-      getDownloadURL(audioRef)
+      // using filename, get file from storage
+      // ref is built in function from firebase
+      const audioRef = ref(storage, audioName); // reference to file
+      getDownloadURL(audioRef) // retrieve from firebase
       .then((url) => {
-
+  // url is firebase url
         fetch(url)
         .then(response => response.blob())
         .then(blob => {
+          // using blob from url
       const audio = document.createElement('audio');
       audio.src = URL.createObjectURL(blob);
-      audio.play();
+      audio.play();  // play audio
+     
+
       // const body = document.querySelector('body');
       // body.appendChild(audio);
       // audio.play();
