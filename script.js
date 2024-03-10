@@ -1,15 +1,19 @@
 (function () {
+  // why do you need to grab this element?
+  // what is 2d context?
   const canvas = document.getElementById("canvas")
   const ctx = canvas.getContext("2d")
 
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
 
+  // i'm going to assume this is necessary for each window
   addEventListener("resize", () => {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
   })
 
+  // Create a class to work with and modify
   class Square {
     constructor(x, y, width, height, color) {
       this.x = x
@@ -22,13 +26,23 @@
       this.vy = Math.random() * 10
     }
 
+    // Draw function is abstract and user defined
+    // This function helps to actually render a shape onto the screen
+    //
     draw() {
+      // fillstyle to set color
+      // this is an inline method 
       ctx.fillStyle = this.color
+      // this I'm assuming is what draws the actual things
       ctx.fillRect(this.x, this.y, this.width, this.height)
+
+      // x and y positions are going to be affected
+      // these rely on velocity values set before
 
       this.x += this.vx
       this.y += this.vy
 
+      // bounce property of shapes
       if (this.x >= canvas.width - this.width || this.x <= 0) {
         this.vx *= -1
       }
@@ -38,7 +52,9 @@
     }
   }
 
+  // separate function to create random squares within screen
   function createRandomSquare() {
+    // coordinates of random squares should lie within canvas
     const xRange = canvas.width - 100
     const yRange = canvas.height - 100
 
