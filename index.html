@@ -3,23 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SonicScape</title>
+  <title>Document</title>
   <style>
     html, body {
-      height: 100%;
+        height: 100%;
     }
     body {
-        margin: 0px;
+        margin: 0;
     }
-    canvas {
-      border: 5px solid gray;
-      /* background-image: url("http://bit.ly/UpQgJ6"); */
-      /* If you want to run offline, you can download file to fs */
+    .container {
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .button-container {
+      display: flex;
+      flex-direction: row;
+    }
+    button {
+      margin: 10px;
     }
   </style>
 </head>
 <body>
-  <canvas id="canvas"></canvas>
-  <script src="twoScript.js"></script>
+  <div class="container">
+    <div class="logo-containter">
+      <h2>SonicScape</h2>
+    </div>
+    <div class="button-container">
+      <div>
+        <!-- Input type tag allows user to upload -->
+      <input type="file" id="upload" accept=".mp3" required>Upload New Song</button>
+    </div>
+    <div>
+      <button id="existing">Choose Existing Song</button>
+    </div>
+    </div>
+  </div>
+  <script>
+    // Event listeners that monitor html events:
+    // change, click, mousehover, mouseleave, keydown, keyup, keypress, etc.
+    // Change: a change from previous element
+    const FREQUENCY_BIN_COUNT = 128;
+    document.getElementById('upload').addEventListener('change', (e) => {
+      // e.target is the element that triggered the event
+
+      const audio = document.createElement('audio')
+      audio.src = URL.createObjectURL(e.target.files[0]);
+
+      let analyser;
+      const dataArray = new Uint8Array(FREQUENCY_BIN_COUNT);
+
+      // Create audio context
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      // Initialize analyser
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 2 * FREQUENCY_BIN_COUNT;
+
+      // Analyser's frequencyBinCount is always half of the fftSize (https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/frequencyBinCount)
+      const source = audioCtx.createMediaElementSource(audio);
+      // Connect source -> analyser -> destination
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+
+      audio.play();
+
+      setInterval(() => {
+        analyser.getByteFrequencyData(dataArray);
+        console.log(dataArray);
+      }, 50);
+    });
+
+    document.getElementById('existing').addEventListener('click', () => {
+      window.location.href = '/music.html';
+    })
+  </script>
 </body>
 </html>
+
+<!-- .then() -->
+<!-- Async operations that code needs to wait for -->
+<!-- Similar to .NET async and await functions used in TRP -->
+<!-- 
