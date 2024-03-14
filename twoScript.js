@@ -6,14 +6,7 @@ import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebas
 
 
     // put firebase config HERE:
-    const firebaseConfig = {
-      apiKey: "AIzaSyA91M6bD68h_Bwt8-mD977tvU6uX14AwzI",
-    authDomain: "audio-project-b4ee4.firebaseapp.com",
-    projectId: "audio-project-b4ee4",
-    storageBucket: "audio-project-b4ee4.appspot.com",
-    messagingSenderId: "579109394249",
-    appId: "1:579109394249:web:8bbc429d5bc1c46b066c98"
-    };
+
     const app = initializeApp(firebaseConfig);
     const storage = getStorage(app);
     
