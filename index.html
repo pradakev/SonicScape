@@ -12,13 +12,14 @@
         margin: 0;
     }
     .container {
-      height: 100%;
       padding: 0;
       margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      z-index: 1;
+      height: 100%;
     }
     .button-container {
       display: flex;
@@ -27,12 +28,22 @@
     button {
       margin: 10px;
     }
+    canvas {
+      border:2px solid gray;
+      background-color: #222021;
+      position: absolute;
+      z-index: -1;
+    }
+    h1 {
+      color: #e5e5e5;
+    }
   </style>
 </head>
 <body>
+  <canvas id="canvas"></canvas>
   <div class="container">
     <div class="logo-containter">
-      <h2>SonicScape</h2>
+      <h1>SonicScape</h1>
     </div>
     <div class="button-container">
       <div>
@@ -47,9 +58,10 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js'
     import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
-    
-    // put firebase config HERE:
+    import { Shape, Circle, Triangle, createRandomCircle, createRandomTriangle } from './shapes.js'
 
+    // put firebase config HERE:
+    
     const app = initializeApp(firebaseConfig);
     const storage = getStorage(app);
     
@@ -79,6 +91,41 @@
     document.getElementById('existing').addEventListener('click', () => {
       window.location.href = '/music.html';
     })
+
+    const canvas = document.getElementById("canvas")
+    const ctx = canvas.getContext("2d")
+  
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+  
+    // i'm going to assume this is necessary for each window
+    addEventListener("resize", () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    })
+
+    const numShapes = 100;
+    const shapes = []
+    for (let i = 0; i < numShapes; i++) {
+      const shapeProb = Math.round(Math.random()) * 2
+
+      if (shapeProb === 0) {
+        var circle = createRandomCircle()
+        circle.draw(ctx)
+        shapes.push(circle)
+      }
+      else {
+        var triangle = createRandomTriangle()
+        triangle.draw(ctx)
+        shapes.push(triangle)
+      }
+    }
+    const stringifiedShapes = []
+    shapes.forEach(shape => {
+      stringifiedShapes.push(shape.stringify())
+    })
+    // Elements have to be stored
+    localStorage.setItem("shapes", JSON.stringify(stringifiedShapes))
   </script>
 </body>
 </html>
