@@ -58,9 +58,13 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js'
     import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
-    import { Circle, createRandomCircle } from './Circle.js'
-    import { Triangle, createRandomTriangle } from './Triangle.js'
-    import { firebaseConfig } from './firebaseConfig.js'
+    
+    // Note the format used here to include JavaScript files
+    // url_for('static') Since we're pulling the files from the static folder
+
+    import { Circle, createRandomCircle } from "{{ url_for('static', filename='js/shapes/Circle.js') }}"
+    import { Triangle, createRandomTriangle } from "{{ url_for('static', filename='js/shapes/Triangle.js') }}"
+    import { firebaseConfig } from "{{ url_for('static', filename='js/firebaseConfig.js') }}"
 
     // put firebase config HERE:
     
@@ -83,7 +87,7 @@
         localStorage.setItem('audioName', e.target.files[0].name);
       })
       .then(() => {
-        window.location.href = '/music.html';
+        window.location.href = '{{ url_for("music") }}';
       })
 
     
@@ -91,7 +95,7 @@
     });
 
     document.getElementById('existing').addEventListener('click', () => {
-      window.location.href = '/music.html';
+      window.location.href = '{{ url_for("music") }}';
     })
 
     const canvas = document.getElementById("canvas")
