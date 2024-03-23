@@ -58,7 +58,9 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js'
     import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
-    import { Shape, Circle, Triangle, createRandomCircle, createRandomTriangle } from './shapes.js'
+    import { Circle, createRandomCircle } from './Circle.js'
+    import { Triangle, createRandomTriangle } from './Triangle.js'
+    import { firebaseConfig } from './firebaseConfig.js'
 
     // put firebase config HERE:
     

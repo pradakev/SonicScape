@@ -1,7 +1,8 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js'
 import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
-import { Circle, Triangle, createRandomCircle, createRandomTriangle } from './shapes.js'
-
+import { Circle, createRandomCircle } from './Circle';
+import { Triangle, createRandomTriangle } from './Triangle';
+import { firebaseConfig } from './firebaseConfig';
 
 (
   function () {
