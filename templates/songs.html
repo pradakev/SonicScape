@@ -42,24 +42,21 @@
 <body>
   <canvas id="canvas"></canvas>
   <div class="container">
-    <div class="logo-containter">
-      <h1>SonicScape</h1>
-    </div>
-    <div class="button-container">
-      <div>
-        <!-- Input type tag allows user to upload -->
-      <input type="file" id="upload" accept=".mp3" required>Upload New Song</button>
-    </div>
-    <div>
-      <button id="existing">Choose Existing Song</button>
-    </div>
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th style="color:#e5e5e5">Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      </tbody>
+    </table>
   </div>
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js'
-    import { getDatabase, ref as dbRef, push } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js'
-    import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js"
-    
+    import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js'
+
     // Note the format used here to include JavaScript files
     // url_for('static') Since we're pulling the files from the static folder
 
@@ -71,37 +68,27 @@
     
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
-    const storage = getStorage(app);
-    
 
-    // Event listeners that monitor html events:
-    // change, click, mousehover, mouseleave, keydown, keyup, keypress, etc.
-    // Change: a change from previous element
-    const FREQUENCY_BIN_COUNT = 128;
-    document.getElementById('upload').addEventListener('change', (e) => {
-      // e.target is the element that triggered the event
-      const audioRef = ref(storage, e.target.files[0].name);
-      const audio = document.createElement('audio')
-      audio.src = URL.createObjectURL(e.target.files[0]);
+    const container = document.querySelector(".container")
 
-      uploadBytes(audioRef, e.target.files[0]).then((snapshot) => {
-        console.log('Uploaded a blob or file!');
-        localStorage.setItem('audioName', e.target.files[0].name);
-        return null;
-      })
-      .then(() => {
-        const audioName = e.target.files[0].name;
-        const audioRef = dbRef(database, 'audio');
-        return push(audioRef, { name: audioName, createdAt: Date.now() });
-      })
-      .then(() => {
-        window.location.href = '{{ url_for("music") }}';
+
+    const audioRef = ref(database, 'audio')
+    onValue(audioRef, (snapshot) => {
+      snapshot.forEach((data) => {
+        const song = data.val()
+        const table = document.querySelector("tbody")
+        const row = document.createElement("tr")
+        const title = document.createElement("td")
+        title.style.color = "#fff"
+        title.innerText = song.name
+        title.addEventListener("click", () => {
+          localStorage.setItem("audio", song.name)
+          window.location.href = "/music"
+        })
+        row.appendChild(title)
+        table.appendChild(row)
       })
     });
-
-    document.getElementById('existing').addEventListener('click', () => {
-      window.location.href = '{{ url_for("songs") }}';
-    })
 
     const canvas = document.getElementById("canvas")
     const ctx = canvas.getContext("2d")

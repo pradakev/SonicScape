@@ -10,5 +10,9 @@ def index():
 def music():
     return render_template('music.html')
 
+@app.route('/songs', methods=['GET'])
+def songs():
+    return render_template('songs.html')
+
 if __name__ == 'main':
     app.run(debug=True, static_url_path='/static')
